@@ -1,0 +1,16 @@
+<gcard>
+
+	<detector name="condor" factory="TEXT" variation="original"/>
+	<option name="geometry" value="800x600"/>
+	<option name="ALLRAWS" value="flux,condor"/>
+	<option name="INTEGRATEDRAW" value="flux,condor"/>
+	
+
+	<option name="COSMICRAYS" value="default, 0.1, 1"/>
+	<option name="COSMICAREA" value="0, 0, 0, 10*m"/>
+
+	<option name="OUTPUT" value="evio, out.ev"/>
+	<option name="SAVE_ALL_MOTHERS" value="1"/>
+	
+	<option name="PHYSICS" value="STD + FTFP_BERT"/>
+</gcard>
