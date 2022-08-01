@@ -1,1 +1,22 @@
 
+
+#To run gemc on docker, first install the docker image.  You will only need to do this once
+
+docker pull jeffersonlab/gemc:2.9
+
+# Example of running the the docker image and create a container
+docker run -it --rm jeffersonlab/gemc:2.9
+
+# Example with addtional arguments to mount a directory and run this in a browser.  
+docker run -it --rm -v /Users/spaul/condor/:/condor/  -p 127.0.0.1:6080:6080 jeffersonlab/gemc:2.9
+
+#similar example for Windows:
+docker run -it --rm -v c:/condor/:/condor/  -p 127.0.0.1:6080:6080 jeffersonlab/gemc:2.9
+
+# to run GEMC, run the following command inside the docker container
+cd /condor/gemc; gemc condor.gcard 
+
+#you can also specify arguments to gemc overriding the gcard file's parameters using -PARNAME="parvalue", replacing PARNAME with the name of the parameter and parvalue with the value for the parameter.  
+
+To convert the output to root: (do this inside the docker container.  this must be done in the same directory where the condor__bank.txt file resides.  In the example below, the input file is out.ev, and the resulting output file is out.root)
+evio2root -INPUTF=out.ev -B=condor,flux -R=condor,flux
