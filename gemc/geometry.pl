@@ -4,6 +4,7 @@ use warnings;
 our %configuration;
 our %parameters;
 
+
 #units are meters
 my $panel_length=1.6;
 my $panel_width=0.6;
@@ -40,7 +41,7 @@ sub build_mother
     $detector{"rotation"}    = "0*deg 0*deg 0*deg";
     $detector{"color"}       = "000000";
     $detector{"type"}        = "Box";
-    $detector{"dimensions"}  = "130*m 20*m 120*m";
+    $detector{"dimensions"}  = "130*m 180*m 120*m";
     $detector{"material"}    = "G4_AIR";
     $detector{"mfield"}      = "no";
     $detector{"visible"}     = 0;
@@ -50,6 +51,18 @@ sub build_mother
 
 sub build_panels()
 {
+  my %elevations=();
+  my $filename = "elevations.txt";
+  open(FH, '<', $filename) or die $!;
+  while (<FH>) {
+    my $line= $_;
+    chomp $line;
+    my @fields = split "," , $line;
+    my $key=cnumber(int($fields[0])*100+int($fields[1]),10);
+    $elevations{$key}=$fields[2];
+  }
+  close(FH);
+
   for(my $gi=1; $gi<=$n_groups_x; $gi++)
   {
     my $str_gi     = cnumber($gi-1, 10);
@@ -69,7 +82,7 @@ sub build_panels()
       # positioning
 
       my $x      = sprintf("%.5f", $group_spacing_x*($gi-1/2-$n_groups_x/2));
-      my $y      = 0;
+      my $y      = $elevations{cnumber($gi*100+$gj,10)};
       #my $y      = sprintf("%.3f", $SPACING_Y*$n);
       my $z      = sprintf("%.5f", $group_spacing_z*($gj-1/2-$n_groups_z/2));
       
