@@ -1,26 +1,27 @@
-
+#Running GEMC requires the use of Docker.  First install docker, following the instructions on https://www.docker.com
 
 #To run gemc on docker, first install the docker image.  You will only need to do this once
 
 docker pull jeffersonlab/gemc:2.9
 
-# Example of running the the docker image and create a container
-docker run -it --rm jeffersonlab/gemc:2.9
 
-# Example with addtional arguments to mount a directory and run this in a browser.  
-docker run -it --rm -v /Users/spaul/condor/:/condor/  -p 127.0.0.1:6080:6080 jeffersonlab/gemc:2.9
+# The following command runs the disk image to create a docker container, and mounts the condor directory inside the container.  Replace /path/to/condor with the path to condor, for instance "/User/home/spaul/condor/" or "c:/condor/", depending on your operating system.
+docker run -it --rm -v /path/to/condor/:/condor/  -p 127.0.0.1:6080:6080 jeffersonlab/gemc:2.9
 
-#similar example for Windows:
-docker run -it --rm -v c:/condor/:/condor/  -p 127.0.0.1:6080:6080 jeffersonlab/gemc:2.9
+#to open this in your browser, open the following url in your browser:
+http://127.0.0.1:6080
 
-# to compile the geometry and other things, run the following command 
+# to compile the condor geometry and other essentials, run the following command 
 while inside the container:
+cd /condor/gemc
 perl condor.pl config.dat
 
-# to run GEMC, run the following command inside the docker container
-cd /condor/gemc; gemc condor.gcard 
+# to run GEMC, run the following command while inside the docker container.  The condor.gcard contains the configuration for running gemc.  
+gemc condor.gcard 
 
-#you can also specify arguments to gemc overriding the gcard file's parameters using -PARNAME="parvalue", replacing PARNAME with the name of the parameter and parvalue with the value for the parameter.  
+#you can also specify arguments to gemc overriding the gcard file's parameters by adding arguments of the form -PARNAME="parvalue" to the end of the command, replacing PARNAME with the name of the parameter and parvalue with the value for the parameter.  For more information on the configuration cards, see https://gemc.jlab.org/gemc/html/documentation/options.html
 
-To convert the output to root: (do this inside the docker container.  this must be done in the same directory where the condor__bank.txt file resides.  In the example below, the input file is out.ev, and the resulting output file is out.root)
+#To convert the output to root: (do this inside the docker container.  this must be done in the same directory where the condor__bank.txt file resides.  In the example below, the input file is out.ev, and the resulting output file is out.root)
 evio2root -INPUTF=out.ev -B=condor,flux -R=condor,flux
+
+# Please note that when exiting the container, all files created in the container will be lost unless they are in a folder that has been mounted.  
