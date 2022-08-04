@@ -13,6 +13,10 @@ docker run -it --rm -v /Users/spaul/condor/:/condor/  -p 127.0.0.1:6080:6080 jef
 #similar example for Windows:
 docker run -it --rm -v c:/condor/:/condor/  -p 127.0.0.1:6080:6080 jeffersonlab/gemc:2.9
 
+# to compile the geometry and other things, run the following command 
+while inside the container:
+perl condor.pl config.dat
+
 # to run GEMC, run the following command inside the docker container
 cd /condor/gemc; gemc condor.gcard 
 
