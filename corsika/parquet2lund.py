@@ -39,7 +39,7 @@ if inputfile==None or outputfile==None:
     exit()
 
 df = pq.read_pandas(inputfile).to_pandas()
-nevents = df.shower[len(df)-1]
+nevents = len(set(df.shower))
 UNUSED =0
 
 condition=f"end_z<{elevation} and start_z>{elevation}"
@@ -50,7 +50,7 @@ pdgdb = ROOT.TDatabasePDG()
 
 
 with open(outputfile, "w") as out:
-    for shower in range(nevents+1):
+    for shower in range(nevents):
         subdf = df.query(f"shower == {shower} and {condition}")
         print(len(subdf), UNUSED, UNUSED, UNUSED, UNUSED, UNUSED, UNUSED, UNUSED, UNUSED, UNUSED,file=out, sep='\t') 
         ii=0
