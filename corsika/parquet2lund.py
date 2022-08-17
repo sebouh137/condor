@@ -89,13 +89,22 @@ with open(outputfile, "w") as out:
             vx = subdf.x[i]*100
             vy = subdf.y[i]*100
             vz = subdf.z[i]*100
-
+            
             #extrapolate to the correct elevation
             if elevation is not None:
                 vx -= np.tan(theta)*np.cos(phi)*(elevation-vz)
                 vy -= np.tan(theta)*np.sin(phi)*(elevation-vz)
                 vz = elevation
-                
+
+            #rotate 90 degrees in yz, to make y be vertical (for GEMC)
+            tmp=vy
+            vy=vz
+            vz=-tmp
+
+            tmp=py
+            py=pz
+            pz=-tmp
+            
             print(ii, UNUSED, 1, subdf.pdg[i], UNUSED,UNUSED, px,py, pz, E, m, vx,vy,vz, file=out, sep='\t')
             #print(subdf[i].shower)
         del subdf
