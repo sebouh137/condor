@@ -92,9 +92,9 @@ with open(outputfile, "w") as out:
             
             #extrapolate to the correct elevation
             if elevation is not None:
-                vx -= np.tan(theta)*np.cos(phi)*(elevation-vz)
-                vy -= np.tan(theta)*np.sin(phi)*(elevation-vz)
-                vz = elevation
+                vx -= np.tan(theta)*np.cos(phi)*(elevation*100-vz)
+                vy -= np.tan(theta)*np.sin(phi)*(elevation*100-vz)
+                vz = elevation*100
 
             #rotate 90 degrees in yz, to make y be vertical (for GEMC)
             tmp=vy
