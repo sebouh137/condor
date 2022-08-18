@@ -4,10 +4,15 @@
 	<option name="geometry" value="800x600"/>
 	<option name="ALLRAWS" value="flux,condor"/>
 	<option name="INTEGRATEDRAW" value="flux,condor"/>
-	
+	<option name="MAX_X_POS" value="100000"/>
+	<option name="MAX_Z_POS" value="100000"/>
+	<option name="MAX_Y_POS" value="51000"/>
 
-	<option name="COSMICRAYS" value="default, 0.1, 1"/>
-	<option name="COSMICAREA" value="0, 0, 0, 10*m"/>
+	<!--uncomment to use internal cosmic generator-->
+	<!--<option name="COSMICRAYS" value="default, 0.1, 1"/>-->
+	<!--<option name="COSMICAREA" value="0, 0, 0, 10*m"/>-->
+	<option name="INPUT_GEN_FILE" value="LUND, out.lund"/>
+	<option name="SHIFT_LUND_VERTEX" value="(0, -5300, 0)m"/>
 
 	<option name="OUTPUT" value="evio, out.ev"/>
 	<option name="SAVE_ALL_MOTHERS" value="1"/>
