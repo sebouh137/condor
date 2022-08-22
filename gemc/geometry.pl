@@ -132,9 +132,9 @@ sub build_panels()
             $detector{"material"}   = "scintillator";
             $detector{"visible"}     = 1;
             $detector{"style"}       = 1;
-            $detector{"sensitivity"} = "flux";
-            $detector{"hit_type"}    = "flux";
-            $detector{"identifiers"} = "group_row manual $gj group_col manual $gj panel_x manual $pi panel_y manual $pj panel_z manual $pk side manual 0";
+            $detector{"sensitivity"} = "condor";
+            $detector{"hit_type"}    = "condor";
+            $detector{"identifiers"} = "group_x manual $gi group_y manual $gj panel_x manual $pi panel_y manual $pj panel_z manual $pk side manual 0";
 	    
             print_det(\%configuration, \%detector);
             

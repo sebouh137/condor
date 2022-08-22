@@ -7,6 +7,7 @@
 	<option name="MAX_X_POS" value="100000"/>
 	<option name="MAX_Z_POS" value="100000"/>
 	<option name="MAX_Y_POS" value="51000"/>
+	<option name="HIT_PROCESS_LIST" value="CONDOR"/>
 
 	<!--uncomment to use internal cosmic generator-->
 	<!--<option name="COSMICRAYS" value="default, 0.1, 1"/>-->
