@@ -23,8 +23,8 @@ sub define_bank
 	
 	# uploading the hit definition
 	insert_bank_variable(\%configuration, $bankname, "bankid",   $bankId, "Di", "$bankname bank ID");
-	insert_bank_variable(\%configuration, $bankname, "group_x",       1, "Di", "column number for the panel group");
-	insert_bank_variable(\%configuration, $bankname, "group_y",      2, "Di", "row number for the panel group");
+	insert_bank_variable(\%configuration, $bankname, "group_x",       1, "Di", "x index for the panel group");
+	insert_bank_variable(\%configuration, $bankname, "group_z",      2, "Di", "z index for the panel group");
 	insert_bank_variable(\%configuration, $bankname, "panel_x",      3, "Di", "x index for the panel within the group");
         insert_bank_variable(\%configuration, $bankname, "panel_y",      4, "Di", "y index for the panel within the group");
         insert_bank_variable(\%configuration, $bankname, "panel_z",      5, "Di", "z index for the panel within the group");

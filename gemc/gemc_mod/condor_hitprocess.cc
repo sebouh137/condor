@@ -104,7 +104,7 @@ map<string, double> condor_HitProcess::integrateDgt(MHit* aHit, int hitn) {
 	vector<identifier> identity = aHit->GetId();
 	
 	int group_x = identity[0].id;
-	int group_y  = identity[1].id; // 1-1A, 2-1B, 3-2B
+	int group_z  = identity[1].id; // 1-1A, 2-1B, 3-2B
 	int panel_x = identity[2].id;
   int panel_y = identity[3].id;
   int panel_z = identity[4].id;
@@ -123,7 +123,7 @@ map<string, double> condor_HitProcess::integrateDgt(MHit* aHit, int hitn) {
 		
 		dgtz["hitn"]       = hitn;
 		dgtz["group_x"]    = group_x;
-		dgtz["group_y"]    = group_y;
+		dgtz["group_z"]    = group_z;
     dgtz["panel_x"]    = panel_x;
     dgtz["panel_y"]    = panel_y;
     dgtz["panel_z"]    = panel_z;
@@ -258,7 +258,7 @@ map<string, double> condor_HitProcess::integrateDgt(MHit* aHit, int hitn) {
 	//	cout << " > FCAL status: " << ftc.status[sector-1][panel-1][1][paddle-1] << " for sector " << sector << ",  panel " << panel << ", paddle " << paddle << " right:  " << adcr << endl;
 	
 	dgtz["group_x"]    = group_x;
-	dgtz["group_y"]    = group_y;
+	dgtz["group_z"]    = group_z;
   dgtz["panel_x"]    = panel_x;
   dgtz["panel_y"]    = panel_y;
   dgtz["panel_z"]    = panel_z;
@@ -361,14 +361,14 @@ map< int, vector <double> > condor_HitProcess::chargeTime(MHit* aHit, int hitn) 
 	vector<identifier> identity = aHit->GetId();
 	
 	int group_x = identity[0].id;
-	int group_y = identity[1].id;
+	int group_z = identity[1].id;
 	int panel_x = identity[2].id;
   int panel_y = identity[3].id;
   int panel_z = identity[4].id;
 	int pmt = identity[5].id; // 0=> Left PMT, 1=> Right PMT. A better name would be pmtSide
 	
 	identifiers.push_back(group_x); // sector
-	identifiers.push_back(group_y); // panel, 1a, 1b, 2a
+	identifiers.push_back(group_z); // panel, 1a, 1b, 2a
 	identifiers.push_back(panel_x); // paddle number
   identifiers.push_back(panel_y); // paddle number
   identifiers.push_back(panel_z); // paddle number
@@ -381,7 +381,7 @@ map< int, vector <double> > condor_HitProcess::chargeTime(MHit* aHit, int hitn) 
 	//hardware.push_back(thisHardware.getChannel());
   
   //making up crate and slot numbers.
-  hardware.push_back(group_x*14+group_y);
+  hardware.push_back(group_x*14+group_z);
   hardware.push_back(panel_y);
   hardware.push_back(panel_x+100*panel_z);
   

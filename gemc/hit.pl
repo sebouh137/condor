@@ -11,7 +11,7 @@ sub define_hit
 	my %hit = init_hit();
 	$hit{"name"}            = "condor";
 	$hit{"description"}     = "condor hit definitions";
-	$hit{"identifiers"}     = "group_x,group_y,panel_x,panel_y,panel_z,side";
+	$hit{"identifiers"}     = "group_x,group_z,panel_x,panel_y,panel_z,side";
 	$hit{"signalThreshold"} = "0.5*MeV";
 	$hit{"timeWindow"}      = "100*ns";
 	$hit{"prodThreshold"}   = "1*mm";
