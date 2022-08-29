@@ -2,7 +2,7 @@
 
 	<detector name="condor" factory="TEXT" variation="original"/>
 	<option name="geometry" value="800x600"/>
-	<option name="ALLRAWS" value="flux,condor"/>
+	<!--<option name="ALLRAWS" value="flux,condor"/>-->
 	<option name="INTEGRATEDRAW" value="flux,condor"/>
 	<option name="MAX_X_POS" value="100000"/>
 	<option name="MAX_Z_POS" value="100000"/>
@@ -15,8 +15,9 @@
 	<option name="INPUT_GEN_FILE" value="LUND, out.lund"/>
 	<option name="SHIFT_LUND_VERTEX" value="(0, -5300, 0)m"/>
 
+	<option name="PRODUCTIONCUT" value="500"/>
 	<option name="OUTPUT" value="evio, out.ev"/>
-	<option name="SAVE_ALL_MOTHERS" value="1"/>
+	<!--<option name="SAVE_ALL_MOTHERS" value="1"/>-->
 	
 	<option name="PHYSICS" value="STD + FTFP_BERT"/>
 </gcard>
