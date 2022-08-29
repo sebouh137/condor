@@ -11,10 +11,13 @@ docker run -it --rm -v /path/to/condor/:/condor/  -p 127.0.0.1:6080:6080 jeffers
 #to open this in your browser, open the following url in your browser:
 http://127.0.0.1:6080
 
-# to compile the condor geometry and other essentials, run the following command 
+# to compile the condor geometry and other essentials, run the following commands 
 while inside the container:
 cd /condor/gemc
+# run this command to run the scripts to create the text files describing the CONDOR detector geometry, materials, etc.
 perl condor.pl config.dat
+# recompile gemc with the CONDOR hitprocess routine added to it
+./mod_and_recompile_gemc.sh
 
 # to run GEMC, run the following command while inside the docker container.  The condor.gcard contains the configuration for running gemc.  
 gemc condor.gcard 
@@ -22,6 +25,6 @@ gemc condor.gcard
 #you can also specify arguments to gemc overriding the gcard file's parameters by adding arguments of the form -PARNAME="parvalue" to the end of the command, replacing PARNAME with the name of the parameter and parvalue with the value for the parameter.  For more information on the configuration cards, see https://gemc.jlab.org/gemc/html/documentation/options.html
 
 #To convert the output to root: (do this inside the docker container.  this must be done in the same directory where the condor__bank.txt file resides.  In the example below, the input file is out.ev, and the resulting output file is out.root)
-evio2root -INPUTF=out.ev -B=condor,flux -R=condor,flux
+evio2root -INPUTF="out.ev" -B="condor" -R="condor"
 
 # Please note that when exiting the container, all files created in the container will be lost unless they are in a folder that has been mounted.  

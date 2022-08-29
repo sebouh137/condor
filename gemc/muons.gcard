@@ -9,15 +9,18 @@
 	<option name="MAX_Y_POS" value="51000"/>
 	<option name="HIT_PROCESS_LIST" value="CONDOR"/>
 
-	<!--uncomment to use internal cosmic generator-->
-	<!--<option name="COSMICRAYS" value="default, 0.1, 1"/>-->
-	<!--<option name="COSMICAREA" value="0, 0, 0, 10*m"/>-->
-	<option name="INPUT_GEN_FILE" value="LUND, out.lund"/>
-	<option name="SHIFT_LUND_VERTEX" value="(0, -5300, 0)m"/>
+	<!--<option name="INPUT_GEN_FILE" value="LUND, out.lund"/>
+	<option name="SHIFT_LUND_VERTEX" value="(0, -5300, 0)m"/>-->
 
 	<option name="PRODUCTIONCUT" value="500"/>
-	<option name="OUTPUT" value="evio, out.ev"/>
-	<!--<option name="SAVE_ALL_MOTHERS" value="1"/>-->
+	<option name="OUTPUT" value="evio, muon_test.ev"/>
+
+	<option name="BEAM_P" value="mu-, 10*GeV, 90*deg, -90*deg"/>
+	<option name="BEAM_V" value="(0, 50, 0)m"/>
+	<option name="SPREAD_P" value="5*GeV, 0*deg  0*deg"/>
+	<option name="SPREAD_V" value="(60, 0, 60)m"/>
+	<option name="N" value="10000"/>	
+	<option name="SWITCH_MATERIALTO" value="dirt, G4_AIR"/>
 	
 	<option name="PHYSICS" value="STD + FTFP_BERT"/>
 </gcard>
