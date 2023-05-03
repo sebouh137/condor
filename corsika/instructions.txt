@@ -1,0 +1,14 @@
+
+
+ Follow the instructions on how to install corsika from https://gitlab.iap.kit.edu/AirShowerPhysics/corsika/-/tree/master/  
+
+#Copy the modified version of corsika.cpp from the folder condor/corsika/ into corsika-work.  This contains some changes to the executable, including additional commandline arguments that were not previously present:
+
+cd corsika-work 
+make
+
+#note, you may have to modify these commands depending on where you installed corsika and the condor project.  
+mkdir out
+bin/corsika --energy 1000 --filename out/22_1000GeV --pdg 22 --nevent 10 --emcut 0.35 --hadcut 0.35
+cd ~/condor/corsika
+
