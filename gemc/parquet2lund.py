@@ -104,6 +104,18 @@ with open(outputfile, "w") as out:
             tmp=py
             py=pz
             pz=-tmp
+
+            #correct for time difference
+            mintime=np.min(subdf.time)
+            c=299792458
+
+            p=np.sqrt(px**2+py**2+pz**2)
+            ux, uy, uz = px/p, py/p, pz/p
+            
+            vx-=100*(subdf.time[i]-mintime)*ux/c
+            vy-=100*(subdf.time[i]-mintime)*uy/c
+            vx-=100*(subdf.time[i]-mintime)*uz/c
+
             
             print(ii, UNUSED, 1, subdf.pdg[i], UNUSED,UNUSED, px,py, pz, E, m, vx,vy,vz, file=out, sep='\t')
             #print(subdf[i].shower)
