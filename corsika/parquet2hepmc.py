@@ -53,11 +53,12 @@ if inputfile==None or outputfile==None:
     exit()
 
 df = pq.read_pandas(inputfile).to_pandas()
+pdgdb = ROOT.TDatabasePDG()
 
 masses={}
-df['m']=np.zeroes(len(df))
+df['m']=np.zeros(len(df))
 for pdg in list(set(df.pdg)):
-    part = db.GetParticle(pdg)
+    part = pdgdb.GetParticle(pdg)
     if part != None:
         m=part.Mass()
     else: # Particle not found in database.  Just set the mass to zero.                                                      
@@ -71,9 +72,9 @@ df['px'] = p*np.cos(phi)*np.sin(theta)
 df['py'] = p*np.sin(phi)*np.sin(theta)
 df['pz'] = -p*np.cos(theta)
 
-vx = subdf.x[i]*1000
-vy = subdf.y[i]*1000
-vz = subdf.z[i]*1000
+vx = df.x[i]*1000
+vy = df.y[i]*1000
+vz = df.z[i]*1000
 
 #extrapolate to the correct elevation                                                                                        
 if elevation is not None:
@@ -84,7 +85,7 @@ df['vx']=vx
 df['vy']=vy
 df['vz']=vz
 df['ct'] =df.time*299792458*1000
-
+df['status']=np.ones(len(df))
 
 nevents = len(set(df.shower))
 UNUSED =0
@@ -92,77 +93,20 @@ UNUSED =0
 #condition=f"end_z<{elevation} and start_z>{elevation}"
 #condition='pdg==130'
 
-masses={}
-pdgdb = ROOT.TDatabasePDG()
 
 
-with pyhepmc.open(outputfile, "w", precision=5) as f:
+
+
+with pyhepmc.open(outputfile, "w", precision=6) as f:
     for shower in range(nevents):
         subdf = df.query(f"shower == {shower}")
-        print(len(subdf), UNUSED, UNUSED, UNUSED, UNUSED, UNUSED, UNUSED, UNUSED, UNUSED, UNUSED,file=out, sep='\t') 
-        ii=0
-
-
+        #print(len(subdf), UNUSED, UNUSED, UNUSED, UNUSED, UNUSED, UNUSED, UNUSED, UNUSED, UNUSED,file=out, sep='\t') 
+        #ii=0
         
-        event=pyhepmc.GenEvent(subdf.px, subdf.py, subdf.pz, subdf.energy, subdf.m, subdf.pdg, subdf.status,
-                               None, None, subdf.vx, subdf.vy, subdf.vz, subdf.ct)
-        """for i in subdf.index:
-            ii+=1
-            #norm = np.sqrt((subdf.end_x[i]-subdf.start_x[i])**2+(subdf.end_y[i]-subdf.start_y[i])**2+(subdf.end_z[i]-subdf.start_z[i])**2)
-            pdg = int(subdf.pdg[i])
-            if pdg in masses.keys():
-                m = masses[pdg]
-            else:
-                part = pdgdb.GetParticle(pdg)
-                if part != None:
-                    m=part.Mass()
-                else: # Particle not found in database.  Just set the mass to zero.
-                    m= 0
-                masses[pdg]=m
-                
-                
-            E  = subdf.energy[i]
-            p = np.sqrt(E**2-m**2)
-            px = p*np.cos(phi)*np.sin(theta)
-            py = p*np.sin(phi)*np.sin(theta)
-            pz = -p*np.cos(theta)
-
-
-            
-            vx = subdf.x[i]*100
-            vy = subdf.y[i]*100
-            vz = subdf.z[i]*100
-            
-            #extrapolate to the correct elevation
-            if elevation is not None:
-                vx -= np.tan(theta)*np.cos(phi)*(elevation*100-vz)
-                vy -= np.tan(theta)*np.sin(phi)*(elevation*100-vz)
-                vz = elevation*100
-
-            #rotate 90 degrees in yz, to make y be vertical (for GEMC)
-            tmp=vy
-            vy=vz
-            vz=-tmp
-
-            tmp=py
-            py=pz
-            pz=-tmp
-
-            #correct for time difference
-            mintime=np.min(subdf.time)
-            c=299792458
-
-            p=np.sqrt(px**2+py**2+pz**2)
-            ux, uy, uz = px/p, py/p, pz/p
-            
-            vx-=100*(subdf.time[i]-mintime)*ux/c
-            vy-=100*(subdf.time[i]-mintime)*uy/c
-            vx-=100*(subdf.time[i]-mintime)*uz/c
-
-            particle=pyhepmc.GenParticle(pyhepmc.FourVector(
-            print(ii, UNUSED, 1, subdf.pdg[i], UNUSED,UNUSED, px,py, pz, E, m, vx,vy,vz, file=out, sep='\t')
-            #print(subdf[i].shower)
-        """
-        del subdf
+        event=pyhepmc.GenEvent()
+        event.from_hepevt(shower,subdf.px, subdf.py, subdf.pz, subdf.energy,subdf.m, subdf.pdg,subdf.status,
+                              None, None, subdf.vx, subdf.vy, subdf.vz, subdf.ct)
+        
+        #del subdf
 
         f.write(event)
