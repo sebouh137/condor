@@ -104,9 +104,21 @@ with pyhepmc.open(outputfile, "w", precision=6) as f:
         #ii=0
         
         event=pyhepmc.GenEvent()
-        event.from_hepevt(shower,subdf.px, subdf.py, subdf.pz, subdf.energy,subdf.m, subdf.pdg,subdf.status,
-                              None, None, subdf.vx, subdf.vy, subdf.vz, subdf.ct)
+
+        #parent and children particle indices
+        #use the indices that leave this empty
+        #parents=[(0,0)]*len(subdf)
+        #children=[(0,0)]*len(subdf)
         
+        event.from_hepevt(shower,subdf.px, subdf.py, subdf.pz, subdf.energy,subdf.m, subdf.pdg,subdf.status)
+          #                    parents, children,
+          #                subdf.vx, subdf.vy, subdf.vz, subdf.ct)
+        for i in range(len(event.particles)):
+            p=event.particles[i]
+            v=pyhepmc.GenVertex(pyhepmc.FourVector(list(subdf.vx)[i], list(subdf.vy)[i], list(subdf.vz)[i], list(subdf.ct)[i]))
+            v.add_particle_out(p)
+            event.add_vertex(v)
+            
         #del subdf
 
         f.write(event)
