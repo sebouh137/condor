@@ -28,7 +28,11 @@ def print_usage():
 
     python parquet2hepmc.py --elevation 5450 --input in.parquet --output out.hepmc -z zenith -a azimuth
 
-    converts in.parquet to out.lund, extrapolating all particle's trajectories to z=5350 (the approximate elevation of CONDOR + 50 m).  The "elevation" argument is optional.  The zenith and azimuth are in degrees.  If omitted, they default to 0
+    converts in.parquet to out.lund, extrapolating all particle's trajectories to z=5350 (the approximate elevation of CONDOR + 50 m).  The "elevation" argument is optional.  The zenith and azimuth are in degrees.  If omitted, they default to 0.
+
+    Transformed to a coordinate system where x=east, y=north, and z=up.  
+
+    All particles are assumed to come from the same direction:  sin(zenith)*sin(azimuth), sin(zenith)*cos(azimuth), cos(zenith)
     """)
 
     
@@ -66,25 +70,35 @@ for pdg in list(set(df.pdg)):
     masses[pdg]=m
     df['m'] += (df.pdg==pdg)*m
 
-E  = df.energy[i]
+E  = df.energy
 p = np.sqrt(E**2-df.m**2)
-df['px'] = p*np.cos(phi)*np.sin(theta)
-df['py'] = p*np.sin(phi)*np.sin(theta)
+
+beta=p/E
+
+# phi is the direction from which the particle is coming, with north as 0, going clockwise
+# to transform this to east=x, north=y, use the following transformation
+df['px'] = -p*np.sin(phi)*np.sin(theta)
+df['py'] = -p*np.cos(phi)*np.sin(theta)
 df['pz'] = -p*np.cos(theta)
 
-vx = df.x[i]*1000
-vy = df.y[i]*1000
-vz = df.z[i]*1000
-
-#extrapolate to the correct elevation                                                                                        
+vx = df.x*1000
+vy = df.y*1000
+vz = df.z*1000
+ct = df.time*299792458*1000
+#extrapolate to the correct elevation
+# also take into account the differences of conventions
 if elevation is not None:
-    vx -= np.tan(theta)*np.cos(phi)*(elevation*1000-vz)
-    vy -= np.tan(theta)*np.sin(phi)*(elevation*1000-vz)
+    ct -= (elevation*1000-vz)/beta/np.cos(theta)
+    vx += np.tan(theta)*np.sin(phi)*(elevation*1000-vz)
+    vy += np.tan(theta)*np.cos(phi)*(elevation*1000-vz)
     vz = elevation*1000
+    
 df['vx']=vx
 df['vy']=vy
 df['vz']=vz
-df['ct'] =df.time*299792458*1000
+df['ct'] =ct
+
+
 df['status']=np.ones(len(df))
 
 nevents = len(set(df.shower))
@@ -109,13 +123,14 @@ with pyhepmc.open(outputfile, "w", precision=6) as f:
         #use the indices that leave this empty
         #parents=[(0,0)]*len(subdf)
         #children=[(0,0)]*len(subdf)
-        
+        #print("event")
         event.from_hepevt(shower,subdf.px, subdf.py, subdf.pz, subdf.energy,subdf.m, subdf.pdg,subdf.status)
           #                    parents, children,
           #                subdf.vx, subdf.vy, subdf.vz, subdf.ct)
         for i in range(len(event.particles)):
             p=event.particles[i]
             v=pyhepmc.GenVertex(pyhepmc.FourVector(list(subdf.vx)[i], list(subdf.vy)[i], list(subdf.vz)[i], list(subdf.ct)[i]))
+            #print(list(subdf.vx)[i])
             v.add_particle_out(p)
             event.add_vertex(v)
             
