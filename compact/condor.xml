@@ -1,0 +1,117 @@
+<lccdd>
+
+  <info name="CONDOR.xml"
+        title="CONDOR detector"
+        author="Sebouh Paul"
+        url="https://github.com/sebouh137"
+        status="development"
+        version="1.0"
+  ><comment/></info>
+
+  <define>
+    
+    <documentation> scintillators are N/S lengthwise </documentation>
+    <constant name="CondorScintillatorThickness"              value="2*cm"/>
+    <constant name="CondorScintillatorLength"     value="1.6*m"/>
+    <constant name="CondorScintillatorWidth"       value="5*cm"/>
+
+    <documentation> Rows and columns do not include the periphery panel groups, added separately.</documentation>
+    <constant name="CondorNRows" value="14"/>
+    <constant name="CondorNCols" value="14"/>
+    <constant name="CondorScintPerPanel" value="12"/>
+    <constant name="CondorPanelWidth" value="CondorScintPerPanel*CondorScintillatorWidth"/>
+    <documentation> number of panels that are edge-to-edge with one another</documentation>
+    <constant name="CondorPanelsPerSuperpanel" value="13"/>
+    <constant name="CondorSuperpanelWidth" value="CondorPanelsPerSuperpanel*CondorScintPerPanel*CondorScintillatorWidth"/>
+    <constant name="CondorSuperpanelLength" value="CondorScintillatorLength"/>
+    <constant name="CondorSuperpanelThickness" value="CondorScintillatorThickness"/>
+    <documentation> number of superpanels within each nearly-square rectangle </documentation>
+    <constant name="CondorSuperpanelsPerBlock" value="4"/>
+
+    <documentation> space between centers of superpanels </documentation>
+    <constant name="CondorSpaceBetweenSuperpanels" value="2.0*m"/>
+    <constant name="CondorBlockDimX" value="8.7*m"/>
+    <constant name="CondorBlockDimY" value="CondorScintillatorThickness"/>
+    <constant name="CondorBlockDimZ" value="8.1*m"/>
+
+    <constant name="Condor_height" value="CondorScintillatorThickness"/>
+    <constant name="Condor_width" value="CondorBlockDimZ*CondorNCols"/>
+    <constant name="Condor_length" value="CondorBlockDimX*CondorNRows"/>
+
+    <constant name="Condor_ID" value="1"/>
+  </define>
+
+  <limits>
+  </limits>
+
+  <regions>
+  </regions>
+
+  <display>
+  </display>
+
+  <detectors>
+    <documentation>
+      ### 
+      
+    </documentation>
+    <detector
+      id="Condor_ID" 
+      name="Condor" 
+      type="Condor"
+      readout="CondorHits"
+      vis="InvisibleWithDaughters"
+    >
+      <position x="0*m" y="0*m" z="0*m"/>
+      <rotation x="0" y="0" z="0"/>
+      <dimensions 
+        x="Condor_length"
+        y="Condor_height"
+        z="Condor_width"
+	/>
+      <!--<layer repeat="1" thickness = "BackwardsEcalInsertAbsorberThickness">
+        <slice name="Absorber_slice" material="Tungsten" thickness="BackwardsEcalInsertAbsorberThickness" vis="AnlBlue"/>
+      </layer>
+
+      <layer repeat="BackwardsEcalInsertLayer_NRepeat" thickness = "2*BackwardsEcalInsertSingleLayerThickness">
+        <slice name="Scintillator1_slice" material="PlasticScint126" thickness="BackwardsEcalInsertScintillatorThickness" vis="AnlOrange" sensitive="true"/>
+        <slice name="PCB1_slice" material="Fr4" thickness="BackwardsEcalInsertPCBThickness" vis="AnlDarkRed"/>
+        <slice name="Absorber1_slice" material="Tungsten" thickness="BackwardsEcalInsertAbsorberThickness" vis="AnlBlue"/>
+	 <slice name="PCB2_slice" material="Fr4" thickness="BackwardsEcalInsertPCBThickness" vis="AnlDarkRed"/>
+         <slice name="Scintillator2_slice" material="PlasticScint126" thickness="BackwardsEcalInsertScintillatorThickness" vis="AnlOrange" sensitive="true"/>
+	 <slice name="Absorber2_slice" material="Tungsten" thickness="BackwardsEcalInsertAbsorberThickness" vis="AnlBlue"/> 
+      </layer>-->
+      <block
+        dim_x="CondorBlockDimX"
+        dim_y="CondorBlockDimY"
+	dim_z="CondorBlockDimZ"
+	n_rows="CondorNRows"
+	n_cols="CondorNCols"
+	vis="InvisibleWithDaughters"
+      />
+      <superpanels
+	  dim_x="CondorSuperpanelLength"
+	  dim_y="CondorSuperpanelThickness"
+	  dim_z="CondorSuperpanelWidth"
+	  spacing_x="CondorSpaceBetweenSuperpanels"
+	  material="Polystyrene"
+	  vis="AnlBlue"
+      />
+      
+    </detector>
+  </detectors>
+
+  <readouts>
+    <readout name="CondorHits">
+      <segmentation type="CartesianStripZ" strip_size_x="CondorPanelWidth"/>
+      <id>system:8,barrel:3,module:4,row:8,column:8,superpanel:8</id>  
+    </readout>
+  </readouts>
+
+  <plugins>
+  </plugins>
+
+  <fields>
+  </fields>
+
+</lccdd>

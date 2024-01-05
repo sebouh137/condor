@@ -1,0 +1,36 @@
+<lccdd>
+  <define>
+    <include ref="${DD4hepINSTALL}/DDDetectors/compact/detector_types.xml"/>
+    <include ref="compact/definitions.xml" />
+  </define>
+
+  <includes>
+    <gdmlFile ref="compact/elements.xml"/>
+    <gdmlFile ref="compact/materials.xml"/>
+  </includes>
+
+  <limits>
+  </limits>
+
+  <regions>
+  </regions>
+
+  <display>
+  <include ref="compact/colors.xml" />
+  </display>
+  
+  <comment> Including the condor detector </comment> 
+  <include ref="compact/condor.xml"/>  
+  <detectors>
+  </detectors>
+
+  <readouts>
+  </readouts>
+
+  <plugins>
+  </plugins>
+
+  <fields>
+  </fields>
+
+</lccdd>
