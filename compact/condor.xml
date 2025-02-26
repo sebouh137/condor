@@ -31,11 +31,11 @@
     <documentation> space between centers of superpanels </documentation>
     <constant name="CondorSpaceBetweenSuperpanels" value="2.0*m"/>
     <constant name="CondorBlockDimX" value="8.7*m"/>
-    <constant name="CondorBlockDimY" value="CondorScintillatorThickness"/>
-    <constant name="CondorBlockDimZ" value="8.1*m"/>
+    <constant name="CondorBlockDimY" value="8.1*m"/>
+    <constant name="CondorBlockDimZ" value="CondorScintillatorThickness"/>
 
     <constant name="Condor_height" value="CondorScintillatorThickness"/>
-    <constant name="Condor_width" value="CondorBlockDimZ*CondorNCols"/>
+    <constant name="Condor_width" value="CondorBlockDimY*CondorNCols"/>
     <constant name="Condor_length" value="CondorBlockDimX*CondorNRows"/>
 
     <constant name="Condor_ID" value="1"/>
@@ -62,25 +62,13 @@
       readout="CondorHits"
       vis="InvisibleWithDaughters"
     >
-      <position x="0*m" y="0*m" z="0*m"/>
+      <position x="0*m" y="0*m" z="5300*m"/>
       <rotation x="0" y="0" z="0"/>
       <dimensions 
         x="Condor_length"
-        y="Condor_height"
-        z="Condor_width"
+        y="Condor_width"
+        z="Condor_height"
 	/>
-      <!--<layer repeat="1" thickness = "BackwardsEcalInsertAbsorberThickness">
-        <slice name="Absorber_slice" material="Tungsten" thickness="BackwardsEcalInsertAbsorberThickness" vis="AnlBlue"/>
-      </layer>
-
-      <layer repeat="BackwardsEcalInsertLayer_NRepeat" thickness = "2*BackwardsEcalInsertSingleLayerThickness">
-        <slice name="Scintillator1_slice" material="PlasticScint126" thickness="BackwardsEcalInsertScintillatorThickness" vis="AnlOrange" sensitive="true"/>
-        <slice name="PCB1_slice" material="Fr4" thickness="BackwardsEcalInsertPCBThickness" vis="AnlDarkRed"/>
-        <slice name="Absorber1_slice" material="Tungsten" thickness="BackwardsEcalInsertAbsorberThickness" vis="AnlBlue"/>
-	 <slice name="PCB2_slice" material="Fr4" thickness="BackwardsEcalInsertPCBThickness" vis="AnlDarkRed"/>
-         <slice name="Scintillator2_slice" material="PlasticScint126" thickness="BackwardsEcalInsertScintillatorThickness" vis="AnlOrange" sensitive="true"/>
-	 <slice name="Absorber2_slice" material="Tungsten" thickness="BackwardsEcalInsertAbsorberThickness" vis="AnlBlue"/> 
-      </layer>-->
       <block
         dim_x="CondorBlockDimX"
         dim_y="CondorBlockDimY"
@@ -91,8 +79,8 @@
       />
       <superpanels
 	  dim_x="CondorSuperpanelLength"
-	  dim_y="CondorSuperpanelThickness"
-	  dim_z="CondorSuperpanelWidth"
+	  dim_y="CondorSuperpanelWidth"
+	  dim_z="CondorSuperpanelThickness"
 	  spacing_x="CondorSpaceBetweenSuperpanels"
 	  material="Polystyrene"
 	  vis="AnlBlue"
@@ -103,8 +91,8 @@
 
   <readouts>
     <readout name="CondorHits">
-      <segmentation type="CartesianStripZ" strip_size_x="CondorPanelWidth"/>
-      <id>system:8,barrel:3,module:4,row:8,column:8,superpanel:8</id>  
+      <segmentation type="CartesianStripY" strip_size_x="CondorPanelWidth"/>
+      <id>system:8,row:8,column:8,superpanel:8</id>  
     </readout>
   </readouts>
 
