@@ -44,12 +44,12 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   const double block_dim_x = dd4hep::getAttrOrDefault<double>(
     block_xml,
     _Unicode(dim_x),
-    14
+    8.7*m
   );
   const double block_dim_y = dd4hep::getAttrOrDefault<double>(
     block_xml,
     _Unicode(dim_y),
-    14
+    8.1*m
   );
   const double block_dim_z = dd4hep::getAttrOrDefault<double>(
     block_xml,

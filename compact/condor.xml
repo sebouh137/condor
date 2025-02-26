@@ -92,7 +92,7 @@
   <readouts>
     <readout name="CondorHits">
       <segmentation type="CartesianStripY" strip_size_x="CondorPanelWidth"/>
-      <id>system:8,row:8,column:8,superpanel:8</id>  
+      <id>system:8,row:8,column:8,superpanel:8,strip:-8</id>  
     </readout>
   </readouts>
 
