@@ -20,9 +20,9 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   int           detID   = detElem.id();
 
   xml_dim_t  dim        = detElem.dimensions();
-  double     width      = dim.x(); // Size along x-axis
-  double     height     = dim.y(); // Size along y-axis
-  double     length     = dim.z(); // Size along z-axis
+  double     length     = dim.x(); // Size along x-axis
+  double     width      = dim.y(); // Size along y-axis
+  double     height     = dim.z(); // Size along z-axis
 
   xml_dim_t  pos        = detElem.position(); // Position in global coordinates
   xml_dim_t rot         = detElem.rotation();
@@ -46,14 +46,14 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
     _Unicode(dim_x),
     14
   );
-  const double block_dim_z = dd4hep::getAttrOrDefault<double>(
-    block_xml,
-    _Unicode(dim_z),
-    14
-  );
   const double block_dim_y = dd4hep::getAttrOrDefault<double>(
     block_xml,
     _Unicode(dim_y),
+    14
+  );
+  const double block_dim_z = dd4hep::getAttrOrDefault<double>(
+    block_xml,
+    _Unicode(dim_z),
     2.*cm
   );
 
@@ -67,17 +67,19 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
     _Unicode(dim_x),
     1.6*m
   );
-  const double superpanel_dim_z = dd4hep::getAttrOrDefault<double>(
-    superpanels_xml,
-    _Unicode(dim_z),
-    7.8*m
-  );
+
   const double superpanel_dim_y = dd4hep::getAttrOrDefault<double>(
     superpanels_xml,
     _Unicode(dim_y),
-    2.*cm
+    7.8*m
   );
 
+  const double superpanel_dim_z = dd4hep::getAttrOrDefault<double>(
+    superpanels_xml,
+    _Unicode(dim_z),
+    2.*cm
+  );
+  
   const double superpanels_per_block = dd4hep::getAttrOrDefault<double>(
     superpanels_xml,
     _Unicode(per_block),
@@ -94,7 +96,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   Material   air        = desc.material("Air");
 
   // Defining envelope
-  Box envelope(width / 2.0, height / 2.0, length / 2.0);
+  Box envelope(length / 2.0, width / 2.0, height / 2.0);
 
   // Defining envelope volume
   Volume envelopeVol(detName, envelope, air);
@@ -108,28 +110,28 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
 
   PlacedVolume pv;
 
-  for(int i=0; i<nrows; i++){
-    for(int j=0; j<ncols; j++){
-      if(i==1 || i == nrows-2 || j == 1 || j == ncols-2
-	 || ((i==0 || i==nrows-1) && j!=0 && j!=ncols-1 && j%3!=2)
-	 || ((j==0 || j==ncols-1) && i!=0 && i!=nrows-1 && i%3!=2))
+  for(int i=0; i<ncols; i++){
+    for(int j=0; j<nrows; j++){
+      if(i==1 || i == ncols-2 || j == 1 || j == nrows-2
+	 || ((i==0 || i==ncols-1) && j!=0 && j!=nrows-1 && j%3!=2)
+	 || ((j==0 || j==nrows-1) && i!=0 && i!=ncols-1 && i%3!=2))
 	continue;
 	 
       std::string block_name = detName + _toString(i, "_row_%d") + _toString(j, "_col_%d");
       Box block(block_dim_x / 2., block_dim_y / 2., block_dim_z / 2.);
       Volume block_vol(block_name, block, air);
 
-      pv = envelopeVol.placeVolume(
+      /*pv = envelopeVol.placeVolume(
         block_vol,
         Transform3D(
           RotationZYX(0, 0, 0),
           Position(
-            (-(nrows-1)/2.+i)*block_dim_x,
-            0.,
-            (-(ncols-1)/2.+j)*block_dim_z
+            (-(ncols-1)/2.+i)*block_dim_x,
+            (-(nrows-1)/2.+j)*block_dim_y,
+	    0
           )
         )
-      );
+      );*/
       for(int k=0; k<superpanels_per_block; k++){
 	Material superpanel_mat = desc.material(superpanels_xml.materialStr());
 	std::string superpanel_name = detName + _toString(i, "_row_%d") + _toString(j, "_col_%d") + _toString(k, "_superpanel_%d");
@@ -155,24 +157,21 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
           superpanels_xml.limitsStr(),
           superpanels_xml.visStr()
 	);
-	/*superpanel_vol.setAttributes(
-          desc,
-          x_slice.regionStr(),
-          x_slice.limitsStr(),
-          x_slice.visStr()
-        );*/
+	
 	pv.addPhysVolID("superpanel", k);
-	pv.addPhysVolID("row", i);
-	pv.addPhysVolID("column", j);
+	pv.addPhysVolID("row", j);
+	pv.addPhysVolID("column", i);
+	//	std::cout << i << " " << j << " " << k << std::endl;
       }
+      
       pv = envelopeVol.placeVolume(
         block_vol,
         Transform3D(
           RotationZYX(0, 0, 0),
           Position(
-            (-(nrows-1)/2.+i)*block_dim_x,
-            0.,
-            (-(ncols-1)/2.+j)*block_dim_z
+            (-(ncols-1)/2.+i)*block_dim_x,
+            (-(nrows-1)/2.+j)*block_dim_y,
+	    0
           )
         )
       );
@@ -183,8 +182,8 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
           block_xml.limitsStr(),
           "InvisibleWithDaughters" //block_xml.visStr()
         );
-      pv.addPhysVolID("row", i);
-      pv.addPhysVolID("column", j);
+      pv.addPhysVolID("row", j);
+      pv.addPhysVolID("column", i);
     }
   }
 
